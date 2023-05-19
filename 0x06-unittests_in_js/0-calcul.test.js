@@ -1,11 +1,21 @@
-const assert = require("assert");
-const calculateNumber = require("./0-calcul");
+const assert = require('assert');
+const calculateNumber = require('./0-calcul.js');
 
-describe("calculateNumber", function () {
-  it("should round sum of numbers", function () {
-    assert.equal(calculateNumber(1.2, 3.7), 5);
-    assert.equal(calculateNumber(2.7, 4.2), 7);
-    assert.equal(calculateNumber(1.5, 3.7), 6);
-    assert.equal(calculateNumber(2.4, 4.8), 7);
+const TEST_CASES = [
+  { a: 1.2, b: 3.7, expected: 5 },
+  { a: 1, b: 3, expected: 4 },
+  { a: 1, b: 4.5, expected: 6 },
+  { a: 1.5, b: 3.7, expected: 6 },
+  { a: 1.4, b: 3.2, expected: 4 },
+  { a: 0, b: 0, expected: 0 },
+  { a: -2.7, b: 4.3, expected: 1 },
+  { a: 9999999, b: 20000001, expected: 30000000 },
+];
+
+describe('test 0-calcul module', function () {
+  TEST_CASES.forEach(function (testCase) {
+    it(`test calculateNumber with ${testCase.a} and ${testCase.b}`, function () {
+      assert.equal(calculateNumber(testCase.a, testCase.b), testCase.expected);
+    });
   });
 });

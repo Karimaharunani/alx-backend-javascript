@@ -1,46 +1,43 @@
-// Student controller
 import readDatabase from '../utils';
 
 class StudentsController {
   static getAllStudents(request, response) {
-    const DB_FILE = process.argv.length > 2 ? process.argv[2] : '';
-    readDatabase(DB_FILE)
-      .then((report) => {
-        const data = [];
-        data.push('This is the list of our students');
-        for (const [field, list] of Object.entries(report)) {
-          if (field) {
-            const listOfFirstName = list.join(', ');
-            data.push(
-              `Number of students in ${field}: ${list.length}. List: ${listOfFirstName}`,
-            );
-          }
-        }
-        response.status = 200;
-        response.send(data.join('\n'));
+    response.setHeader('Content-Type', 'text/plain');
+    readDatabase(process.argv[2])
+      .then((data) => {
+        let msg = 'This is the list of our students';
+        const fields = Object.keys(data);
+        fields.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        fields.forEach((field) => {
+          msg += `\nNumber of students in ${field}: ${
+            data[field].length
+          }. List: ${data[field].join(', ')}`;
+        });
+        response.statusCode = 200;
+        response.send(msg);
       })
       .catch((err) => {
-        response.status = 500;
+        response.statusCode = 500;
         response.send(err.message);
       });
   }
 
   static getAllStudentsByMajor(request, response) {
+    response.statusCode = 200;
     const { major } = request.params;
-    if (major !== 'CS' && major !== 'SWE') {
-      response.status = 500;
-      response.send('Major parameter must be CS or SWE');
-    } else {
-      const DB_FILE = process.argv.length > 2 ? process.argv[2] : '';
-      readDatabase(DB_FILE)
-        .then((studentReport) => {
-          const listOfFirstName = `List: ${studentReport[major].join(', ')}`;
-          response.send(listOfFirstName);
+    if (major === 'CS' || major === 'SWE') {
+      readDatabase(process.argv[2])
+        .then((data) => {
+          response.statusCode = 200;
+          response.send(`List: ${data[major].join(', ')}`);
         })
-        .catch((err) => {
-          response.status = 500;
-          response.send(err.message);
+        .catch(() => {
+          response.statusCode = 500;
+          response.send('Cannot load the database');
         });
+    } else {
+      response.statusCode = 500;
+      response.send('Major parameter must be CS or SWE');
     }
   }
 }

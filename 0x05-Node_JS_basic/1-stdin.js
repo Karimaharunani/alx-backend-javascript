@@ -1,16 +1,23 @@
-// displays message to the user
-process.stdout.write('Welcome to Holberton School, what is your name?\n');
-// set encoding to utf-8 encoding
-process.stdin.setEncoding('utf8');
-// reading user input from the console
+/**
+ * A program that prompts a user for a name and then displays it
+ * in STDOUT. The program also displays a closing message followed by a new
+ * line when the user ends the program.
+ *
+ * Usage:
+ * $ node 1-stdin.js
+ * Welcome to Holberton School, what is your name? : <name>
+ * Your name is: <name>
+ */
+
+console.log('Welcome to Holberton School, what is your name?');
+
 process.stdin.on('readable', () => {
   const name = process.stdin.read();
-  // check user input
-  if (name) {
+  if (name !== null) {
     process.stdout.write(`Your name is: ${name}`);
   }
 });
-// exit message
+
 process.stdin.on('end', () => {
   process.stdout.write('This important software is now closing\n');
 });

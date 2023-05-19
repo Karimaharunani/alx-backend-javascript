@@ -1,28 +1,31 @@
-const assert = require("assert");
-const calculateNumber = require("./1-calcul");
+const assert = require('assert');
+const calculateNumber = require('./1-calcul.js');
 
-describe("calculateNumber", function () {
-  describe("ADDITION", function () {
-    it("should return 6 when 1.4 and 4.5 are added", function () {
-      assert.strictEqual(calculateNumber('SUM', 1.4, 4.5), 6);
+const TEST_CASES = [
+  { type: 'SUM', a: 1.2, b: 3.7, expected: 5 },
+  { type: 'SUM', a: 1, b: 3, expected: 4 },
+  { type: 'SUM', a: 1, b: 4.5, expected: 6 },
+  { type: 'SUM', a: 1.5, b: 3.7, expected: 6 },
+  { type: 'SUM', a: 1.4, b: 3.2, expected: 4 },
+  { type: 'SUBTRACT', a: 1.4, b: 4.5, expected: -4 },
+  { type: 'SUBTRACT', a: 1.4, b: 3.2, expected: -2 },
+  { type: 'SUBTRACT', a: 1.4, b: 1.4, expected: 0 },
+  { type: 'SUBTRACT', a: 3.2, b: 1.4, expected: 2 },
+  { type: 'DIVIDE', a: 1.4, b: 4.5, expected: 0.2 },
+  { type: 'DIVIDE', a: 1.4, b: 0, expected: 'Error' },
+  { type: 'DIVIDE', a: 1.4, b: 1.4, expected: 1 },
+  { type: 'DIVIDE', a: 3.2, b: 1.4, expected: 3 },
+  { type: 'DIVIDE', a: 0, b: 1.4, expected: 0 },
+  { type: 'NOOP', a: 1.4, b: 4.5, expected: undefined },
+];
+
+describe('test 1-calcul module', function () {
+  TEST_CASES.forEach(function (testCase) {
+    it(`test calculateNumber with ${testCase.type} - ${testCase.a} and ${testCase.b}`, function () {
+      assert.equal(
+        calculateNumber(testCase.type, testCase.a, testCase.b),
+        testCase.expected,
+      );
     });
-  });
-  
-  describe('SUBTRACTION', function () {
-    it("should return -4 when 4.5 is subtracted from 1.4", function () {
-      assert.strictEqual(calculateNumber('SUBTRACT', 1.4, 4.5), -4);
-    })
-  });
-
-  describe('DIVISION', function () {
-    it("should return 0.2 when 1.4 is divided by 4.5", function () {
-      assert.strictEqual(calculateNumber('DIVIDE', 1.4, 4.5), 0.2);
-    })
-  });
-
-  describe('DIVISION', function () {
-    it("should return Error when 1.4 is divided by 0", function () {
-      assert.strictEqual(calculateNumber('DIVIDE', 1.4, 0), 'Error');
-    })
   });
 });
